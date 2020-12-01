@@ -10,7 +10,12 @@ pub fn result() -> u16 {
         .map(|num| num.parse().map_err(|e| Error::new(ErrorKind::InvalidData, e)))
         .collect();
 
-    numbers?.
+    match numbers {
+        Ok(v) => for num in v.iter() {
+            println!("the value is: {}", num);
+        },
+        Err(e) => println!("ERROR, {}", e)
+    }
 
     5
 }
