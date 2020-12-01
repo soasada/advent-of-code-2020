@@ -1,5 +1,5 @@
-extern crate day1;
+use day1::problem1;
 
 fn main() {
-    day1::result();
+    println!("Day 1, Problem 1: {}", problem1());
 }
