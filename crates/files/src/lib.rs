@@ -17,7 +17,7 @@ fn load_vec_from<T: FromStr>(filename: &str) -> Result<Vec<T>, T::Err> {
     let br = BufReader::new(file);
 
     return br.lines()
-        .map(|line| line.expect("No line"))
+        .map(|line| line.unwrap())
         .map(|num| num.parse::<T>())
         .collect();
 }
