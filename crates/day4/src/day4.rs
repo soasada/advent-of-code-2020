@@ -45,7 +45,48 @@ pub fn problem1() -> i64 {
 }
 
 pub fn problem2() -> i64 {
-    0
+    let mut valid_passports = 0;
+    let passport_fields = load_passport_fields();
+    let required_fields = required_fields();
+
+    let mut checked_fields = 0;
+    let mut contains_cid = false;
+
+    for (i, field) in passport_fields.iter().enumerate() {
+        if *field != "" {
+            let field_values = field.split(":").collect::<Vec<&str>>();
+            let field_name = field_values[0];
+            let field_value = field_values[1];
+
+            if field_name == "cid" {
+                contains_cid = true;
+            }
+
+            let field_validation_result = required_fields.get(field_name).unwrap()(field_value);
+
+            if field_validation_result {
+                checked_fields += 1;
+            }
+        } else {
+            if checked_fields >= 7 && !contains_cid {
+                valid_passports += 1;
+            } else if checked_fields >= 8 {
+                valid_passports += 1;
+            }
+            checked_fields = 0;
+            contains_cid = false;
+        }
+
+        if i == passport_fields.len() - 1 {
+            if checked_fields >= 7 && !contains_cid {
+                valid_passports += 1;
+            } else if checked_fields >= 8 {
+                valid_passports += 1;
+            }
+        }
+    }
+
+    valid_passports
 }
 
 fn load_passport_fields() -> Vec<String> {
@@ -147,8 +188,6 @@ fn required_fields() -> HashMap<&'static str, fn(&str) -> bool> {
     });
 
     fields_validations.insert("cid", |_val| true);
-
-    // println!("Resutl: {}", fields_validations.get("pid").unwrap()("0123456789"));
 
     fields_validations
 }
