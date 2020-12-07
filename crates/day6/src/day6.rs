@@ -1,6 +1,5 @@
 use files::load_str_vec_from;
 use std::collections::HashSet;
-use std::panic::resume_unwind;
 
 pub fn problem1() -> i64 {
     return load_declaration_forms().iter()
