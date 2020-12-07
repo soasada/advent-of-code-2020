@@ -1,5 +1,6 @@
 use files::load_str_vec_from;
 use std::collections::HashSet;
+use std::panic::resume_unwind;
 
 pub fn problem1() -> i64 {
     return load_declaration_forms().iter()
@@ -9,6 +10,25 @@ pub fn problem1() -> i64 {
 }
 
 pub fn problem2() -> i64 {
+    let declaration_forms_loaded = load_str_vec_from("crates/day6/src/day6_input.txt");
+
+    if let Ok(declaration_forms) = declaration_forms_loaded {
+        let mut responses = Vec::new();
+        for line in declaration_forms.iter() {
+            if line != "" {
+                responses.push(line.chars().collect::<HashSet<_>>());
+            } else {
+                let x = responses.iter()
+                    .fold(HashSet::<char>::new(), |acc, s| {
+                        let y = acc.intersection(&s).cloned().collect();
+                        return y;
+                    })
+                    .len();
+                let a = 1;
+                let b = 1;
+            }
+        }
+    }
     0
 }
 
