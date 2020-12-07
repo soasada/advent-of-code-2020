@@ -14,20 +14,22 @@ pub fn problem2() -> i64 {
 
     if let Ok(declaration_forms) = declaration_forms_loaded {
         let mut responses = Vec::new();
+        let mut sum = 0;
         for line in declaration_forms.iter() {
             if line != "" {
                 responses.push(line.chars().collect::<HashSet<_>>());
             } else {
-                let x = responses.iter()
-                    .fold(HashSet::<char>::new(), |acc, s| {
-                        let y = acc.intersection(&s).cloned().collect();
-                        return y;
-                    })
+                sum += responses.iter()
+                    .fold(responses[0].clone(), |acc, s| acc.intersection(s).cloned().collect())
                     .len();
-                let a = 1;
-                let b = 1;
+                responses = Vec::new();
             }
         }
+
+        sum += responses.iter()
+            .fold(responses[0].clone(), |acc, s| acc.intersection(s).cloned().collect())
+            .len();
+        return sum as i64;
     }
     0
 }
