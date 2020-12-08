@@ -1,6 +1,6 @@
 use files::load_str_vec_from;
-use std::collections::HashMap;
-use regex::{Regex, Match};
+use std::collections::{HashMap, HashSet};
+use regex::Regex;
 
 pub fn problem1() -> i64 {
     let bags_restrictions_loaded = load_str_vec_from("crates/day7/src/day7_input.txt");
@@ -11,7 +11,13 @@ pub fn problem1() -> i64 {
             .map(|v| (v[0].replace(" bags", ""), parse_children_bags(v[1])))
             .collect();
 
-        let a = 1;
+        let mut visited = Vec::new();
+        let mut result = HashSet::new();
+        for b in m.keys() {
+            visit_bags(&m, b, &mut visited, &mut result);
+        }
+
+        return result.len() as i64;
     }
 
     0
@@ -26,4 +32,21 @@ fn parse_children_bags(children_line: &str) -> Vec<&str> {
         .captures_iter(children_line)
         .map(|c| c.get(2).unwrap().as_str())
         .collect::<Vec<&str>>();
+}
+
+fn visit_bags(bags: &HashMap<String, Vec<&str>>,
+              bag_name: &String,
+              visited: &mut Vec<String>,
+              result: &mut HashSet<String>) -> bool {
+    for c in bags.get(bag_name).unwrap().iter() {
+        if *c == "shiny gold" {
+            result.insert(bag_name.clone());
+            return true;
+        } else if visit_bags(bags, &String::from(*c), visited, result) {
+            result.insert(bag_name.clone());
+            return true;
+        }
+    }
+
+    return false;
 }
