@@ -27,22 +27,22 @@ pub fn problem2() -> i64 {
     0
 }
 
-fn parse_children_bags(children_line: &str) -> Vec<&str> {
+fn parse_children_bags(children_line: &str) -> Vec<(&str, i64)> {
     return Regex::new(r"(\d) ([a-z ]+) bag[s]?[,.]?").unwrap()
         .captures_iter(children_line)
-        .map(|c| c.get(2).unwrap().as_str())
-        .collect::<Vec<&str>>();
+        .map(|c| (c.get(2).unwrap().as_str(), c.get(1).unwrap().as_str().parse::<i64>().unwrap()))
+        .collect::<Vec<(&str, i64)>>();
 }
 
-fn visit_bags(bags: &HashMap<String, Vec<&str>>,
+fn visit_bags(bags: &HashMap<String, Vec<(&str, i64)>>,
               bag_name: &String,
               visited: &mut Vec<String>,
               result: &mut HashSet<String>) -> bool {
     for c in bags.get(bag_name).unwrap().iter() {
-        if *c == "shiny gold" {
+        if (*c).0 == "shiny gold" {
             result.insert(bag_name.clone());
             return true;
-        } else if visit_bags(bags, &String::from(*c), visited, result) {
+        } else if visit_bags(bags, &String::from((*c).0), visited, result) {
             result.insert(bag_name.clone());
             return true;
         }
