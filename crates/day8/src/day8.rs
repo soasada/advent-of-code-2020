@@ -16,26 +16,24 @@ pub fn problem2() -> i64 {
 
     if let Ok(instructions) = instructions_loaded {
         let mut result = execute_program(&instructions);
-        while result.1 < instructions.len() {
-            for (i, instruction) in instructions.iter().enumerate() {
-                if result.1 >= instructions.len() {
-                    break;
-                }
+        for (i, instruction) in instructions.iter().enumerate() {
+            if result.1 >= instructions.len() {
+                break;
+            }
 
-                let decoded_instruction: Vec<&str> = instruction.split(" ").collect();
-                let mut operation = decoded_instruction[0];
+            let decoded_instruction: Vec<&str> = instruction.split(" ").collect();
+            let mut operation = decoded_instruction[0];
 
-                if operation == "jmp" {
-                    operation = "nop";
-                } else if operation == "nop" {
-                    operation = "jmp";
-                }
+            if operation == "jmp" {
+                operation = "nop";
+            } else if operation == "nop" {
+                operation = "jmp";
+            }
 
-                if operation != "acc" {
-                    let mut new_program = instructions.to_owned();
-                    new_program[i] = operation.to_owned() + " " + decoded_instruction[1];
-                    result = execute_program(&new_program);
-                }
+            if operation != "acc" {
+                let mut new_program = instructions.to_owned();
+                new_program[i] = operation.to_owned() + " " + decoded_instruction[1];
+                result = execute_program(&new_program);
             }
         }
 
